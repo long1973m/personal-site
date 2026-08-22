@@ -146,6 +146,89 @@ to{opacity:0;transform:translate(-50%,-50%) scaleX(1)}
   filter: blur(90px) saturate(1.45);
 }
 
+/* 极光调色板变体（默认 cool=紫青蓝，见上方 .aurora-1/2/3 原始定义） */
+.aurora-warm .aurora-1 {
+  background: radial-gradient(circle, rgba(255, 105, 31, 0.3), transparent 65%);
+}
+
+.aurora-warm .aurora-2 {
+  background: radial-gradient(circle, rgba(255, 41, 117, 0.26), transparent 65%);
+}
+
+.aurora-warm .aurora-3 {
+  background: radial-gradient(circle, rgba(176, 36, 128, 0.22), transparent 65%);
+}
+
+.aurora-ice .aurora-1 {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.24), transparent 65%);
+}
+
+.aurora-ice .aurora-2 {
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.22), transparent 65%);
+}
+
+.aurora-ice .aurora-3 {
+  background: radial-gradient(circle, rgba(103, 232, 249, 0.18), transparent 65%);
+}
+
+.aurora-rose .aurora-1 {
+  background: radial-gradient(circle, rgba(251, 113, 133, 0.26), transparent 65%);
+}
+
+.aurora-rose .aurora-2 {
+  background: radial-gradient(circle, rgba(244, 114, 182, 0.22), transparent 65%);
+}
+
+.aurora-rose .aurora-3 {
+  background: radial-gradient(circle, rgba(192, 132, 252, 0.18), transparent 65%);
+}
+
+/* 霓虹落日（合成波复古太阳）：横向切缝 + 呼吸辉光 */
+.retro-sun {
+  width: min(44vh, 400px);
+  height: min(44vh, 400px);
+  border-radius: 9999px;
+  background: linear-gradient(
+    to bottom,
+    #ffd319 0%,
+    #ff901f 34%,
+    #ff2975 68%,
+    #b02480 100%
+  );
+  -webkit-mask-image: repeating-linear-gradient(
+    to bottom,
+    #000 0 30px,
+    transparent 30px 36px,
+    #000 36px 66px,
+    transparent 66px 70px,
+    #000 70px 102px,
+    transparent 102px 105px,
+    #000 105px 140px,
+    transparent 140px 142px
+  );
+  mask-image: repeating-linear-gradient(
+    to bottom,
+    #000 0 30px,
+    transparent 30px 36px,
+    #000 36px 66px,
+    transparent 66px 70px,
+    #000 70px 102px,
+    transparent 102px 105px,
+    #000 105px 140px,
+    transparent 140px 142px
+  );
+  animation: sun-pulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes sun-pulse {
+  from {
+    filter: drop-shadow(0 0 28px rgba(255, 90, 60, 0.35));
+  }
+  to {
+    filter: drop-shadow(0 0 58px rgba(255, 150, 50, 0.55));
+  }
+}
+
 /* 赛博网格增强态 */
 .grid-floor-wrap.grid-enhanced .grid-floor {
   opacity: 0.88;

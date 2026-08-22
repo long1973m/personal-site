@@ -5,6 +5,10 @@ import AuroraBackground from './components/AuroraBackground'
 import GridFloor from './components/GridFloor'
 import MouseGlow from './components/MouseGlow'
 import NebulaBackground from './components/NebulaBackground'
+import RetroSun from './components/RetroSun'
+import MatrixRain from './components/MatrixRain'
+import Snowfall from './components/Snowfall'
+import PetalsBackground from './components/PetalsBackground'
 import BootScreen from './components/BootScreen'
 import CardGrid from './components/CardGrid'
 import BackgroundBlur from './components/BackgroundBlur'
@@ -63,11 +67,12 @@ function App() {
 
   const bgStyle = BACKGROUND_STYLES.find(b => b.id === backgroundId) ?? BACKGROUND_STYLES[0]
 
-  // 扫描线/噪点透明度跟随背景风格（CSS 变量注入到根节点）
+  // 底色基调 + 扫描线/噪点透明度跟随背景风格（CSS 变量注入根节点，body 同步底色）
   useEffect(() => {
     const root = document.documentElement
     root.style.setProperty('--scan-opacity', String(bgStyle.layers.scan))
     root.style.setProperty('--noise-opacity', String(bgStyle.layers.noise))
+    document.body.style.background = bgStyle.base
   }, [bgStyle])
 
   const handleSelectBackground = useCallback((id: string) => {
@@ -87,7 +92,7 @@ function App() {
   const currentProject = projects[selectedIndex] || null
 
   return (
-    <div className="min-h-screen bg-ps5-dark relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden" style={{ background: bgStyle.base }}>
       {/* PS5 开机动画 */}
       <AnimatePresence>
         {!booted && (
@@ -98,6 +103,12 @@ function App() {
       {booted && (
         <>
           {/* ===== 背景图层栈（按当前风格组合渲染） ===== */}
+          {bgStyle.layers.matrix && <MatrixRain />}
+
+          {bgStyle.layers.snow && <Snowfall />}
+
+          {bgStyle.layers.petals && <PetalsBackground />}
+
           {bgStyle.layers.nebula && <NebulaBackground />}
 
           {bgStyle.layers.particles && (
@@ -105,16 +116,18 @@ function App() {
           )}
 
           {bgStyle.layers.aurora !== 'off' && (
-            <AuroraBackground intensity={bgStyle.layers.aurora} />
+            <AuroraBackground intensity={bgStyle.layers.aurora} palette={bgStyle.layers.auroraPalette} />
           )}
 
-          {bgStyle.layers.mouseGlow && <MouseGlow />}
+          {bgStyle.layers.mouseGlow && <MouseGlow color={bgStyle.glow} />}
 
           <BackgroundBlur project={currentProject} />
 
           {bgStyle.layers.gridFloor && (
             <GridFloor enhanced={bgStyle.layers.gridEnhanced} />
           )}
+
+          {bgStyle.layers.sun && <RetroSun />}
 
           <ControlBar
             nickname={profile.nickname}

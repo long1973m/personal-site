@@ -47,7 +47,7 @@ export default function SettingsPanel({ open, currentId, onSelect, onClose, onRe
             </div>
 
             {/* 背景风格列表 */}
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 max-h-[58vh] overflow-y-auto pr-0.5">
               {BACKGROUND_STYLES.map((style) => {
                 const active = style.id === currentId
                 return (

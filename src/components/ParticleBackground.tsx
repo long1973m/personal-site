@@ -24,7 +24,7 @@ interface Comet {
 
 interface ParticleBackgroundProps {
   density?: number              // 粒子密度倍率（背景风格系统用）
-  hue?: 'default' | 'cyan'     // 星点色相：default=蓝紫粉 / cyan=青蓝
+  hue?: 'default' | 'cyan' | 'warm' | 'rose'   // 星点色相
 }
 
 export default function ParticleBackground({ density = 1, hue = 'default' }: ParticleBackgroundProps) {
@@ -95,8 +95,12 @@ export default function ParticleBackground({ density = 1, hue = 'default' }: Par
         speedX: (Math.random() - 0.5) * (isMobile ? 0.15 : 0.3),
         speedY: (Math.random() - 0.5) * (isMobile ? 0.15 : 0.3),
         opacity: Math.random() * 0.5 + 0.2,
-        // default: 蓝 → 紫 → 粉 的星域色相 / cyan: 青蓝色相（赛博网格风格）
-        hue: hue === 'cyan' ? Math.random() * 60 + 175 : Math.random() * 100 + 230,
+        // default: 蓝→紫→粉 / cyan: 青蓝 / warm: 洋红→橙金（合成波）/ rose: 粉玫瑰（绯樱）
+        hue:
+          hue === 'cyan' ? Math.random() * 60 + 175
+          : hue === 'warm' ? Math.random() * 75 + 315
+          : hue === 'rose' ? Math.random() * 35 + 325
+          : Math.random() * 100 + 230,
         phase: Math.random() * Math.PI * 2,
         twinkleSpeed: 0.5 + Math.random() * 1.5,
       }))

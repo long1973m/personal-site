@@ -1,10 +1,15 @@
 import { useEffect, useRef } from 'react'
 
 /**
- * 鼠标跟随光晕：一层柔和的紫青径向光，用 lerp 平滑追随光标
+ * 鼠标跟随光晕：一层柔和的径向光，用 lerp 平滑追随光标
  * 仅桌面端（精确指针）启用；直接操作 style，避免 React 重渲染
+ * color 由背景风格系统注入（hex），缺省沿用 .mouse-glow 类的紫青默认色
  */
-export default function MouseGlow() {
+interface MouseGlowProps {
+  color?: string
+}
+
+export default function MouseGlow({ color }: MouseGlowProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -36,5 +41,12 @@ export default function MouseGlow() {
     }
   }, [])
 
-  return <div ref={ref} className="mouse-glow" aria-hidden="true" />
+  return (
+    <div
+      ref={ref}
+      className="mouse-glow"
+      style={color ? { background: `radial-gradient(circle, ${color}30 0%, ${color}14 34%, transparent 62%)` } : undefined}
+      aria-hidden="true"
+    />
+  )
 }
