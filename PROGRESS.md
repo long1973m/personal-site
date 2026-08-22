@@ -269,6 +269,11 @@ ps5-homepage/
 - [x] tsc --noEmit 零错误；vite build 成功（CSS 34.46KB / JS 361.91KB）
 - [x] dev server 全部新模块 200，HMR 后新样式类生效
 
+### Git 初始化与 GitHub 同步（2026-08-22）
+- `git init` + 初始提交（58 文件 / 9086 行），`.gitignore` 排除 node_modules/dist
+- 远端：**https://github.com/long1973m/personal-site**（public，main 分支）
+- ⚠️ GitHub Push Protection 拦截首次推送：`docs/superpowers/plans/2026-07-04-notion-cms-migration.md` 内含真实 Notion Token（ntn_ 前缀，7月4日旧文档）。已替换为占位符并 amend —— 密钥未进入任何推送历史。远端公开前被完整拦截，无泄露。建议后续轮换该 Notion Integration Token
+
 ---
 
 ## 备注
