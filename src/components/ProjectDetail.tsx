@@ -36,8 +36,15 @@ export default function ProjectDetail({ project, onClose }: ProjectDetailProps) 
       }
     }
 
+    // 弹窗打开期间锁定页面背景滚动，关闭后恢复
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
     window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
   }, [onClose])
 
   return (
@@ -52,13 +59,13 @@ export default function ProjectDetail({ project, onClose }: ProjectDetailProps) 
       {/* Backdrop */}
       <div className="absolute inset-0 bg-ps5-dark/90 backdrop-blur-sm" />
 
-      {/* Detail Panel */}
+      {/* Detail Panel — 封面固定，内容区独立滚动 */}
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="relative glass-strong rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden"
+        className="relative glass-strong rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -73,7 +80,7 @@ export default function ProjectDetail({ project, onClose }: ProjectDetailProps) 
         </button>
 
         {/* Cover — 复用卡片的 SVG 封面组件（无 SVG 的项目回退到图片） */}
-        <div className="relative h-64 md:h-80 overflow-hidden">
+        <div className="relative h-56 md:h-72 shrink-0 overflow-hidden">
           {CoverSvg ? (
             <CoverSvg className="w-full h-full" />
           ) : (
@@ -87,8 +94,8 @@ export default function ProjectDetail({ project, onClose }: ProjectDetailProps) 
           <div className="absolute inset-0 bg-gradient-to-t from-ps5-dark via-ps5-dark/20 to-transparent" />
         </div>
 
-        {/* Content */}
-        <div className="p-6 md:p-8 -mt-16 relative">
+        {/* Content — 可滚动区域 */}
+        <div className="overflow-y-auto p-6 md:p-8 -mt-16 relative">
           {FlowSvg && (
             <div className="mb-6">
               <div className="text-xs font-medium text-gray-500 mb-2 tracking-wider uppercase">流程概览</div>

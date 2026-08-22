@@ -161,7 +161,8 @@ function App() {
                       paragraphs={profile.about.paragraphs}
                       focusTopics={profile.about.focusTopics}
                       interests={profile.about.interests}
-                      cvSections={profile.about.cvSections}
+                      journey={profile.about.journey}
+                      beliefs={profile.about.beliefs}
                       contact={profile.about.contact}
                     />
                   </motion.div>
