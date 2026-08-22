@@ -1,0 +1,153 @@
+[
+  {
+    "title": "企业数据分析智能体：如何稳定找对表（知识工程与落地形态）",
+    "summary": "专论：企业数据 Agent 稳定性的第一瓶颈是选表而非写 SQL。系统整理知识资产（域路由、表卡片、字典、薄指标层、术语、gotchas、样例 SQL）、运行时动作链、Skill·RAG·渐进加载等落地形态，以及校验与评测闭环。",
+    "category": "数据分析",
+    "source": "原创",
+    "tags": [
+      "AI 智能体",
+      "数据工程"
+    ],
+    "id": "note-1"
+  },
+  {
+    "title": "数据Agent四问对照：选表 · 提准 · 分析归因 · 找表vs问知识",
+    "summary": "跨笔记对照数据 Agent 的四个硬问题：怎么找对表、准确率怎么提高、分析归因如何避幻觉、找表 vs 问知识怎么分流——综合高德 NL2SQL、阿里语义层、告警中心语义包等实践，抽出共性与缺口。",
+    "category": "数据分析",
+    "source": "原创",
+    "tags": [
+      "AI 智能体",
+      "数据工程",
+      "大模型 Eval"
+    ],
+    "id": "note-2"
+  },
+  {
+    "title": "高德AI Native数据Agent体系实践：从自然语言直达数据结果",
+    "summary": "高德数据 Agent 实践：查数、波动归因、找资产三专域共享知识底座；四步漏斗选表、字段校验与口径强制加载；评测闭环驱动准确率 40%→95%。核心经验：知识工程定上限、规约优于纯 Prompt、分钟级盲测是迭代飞轮。",
+    "category": "数据分析",
+    "source": "外部参考",
+    "tags": [
+      "AI 智能体",
+      "数据工程",
+      "大模型 Eval"
+    ],
+    "id": "note-3"
+  },
+  {
+    "title": "DeepSeek Harness 深度拆解：基于 Cordis 的全插件化 Agent 运行时",
+    "summary": "DeepSeek 首款 Agent 产品 Harness 的深度拆解：基于 Cordis 插件框架实现「一切皆插件」，涵盖可逆卸载机制、Preset 复用、Code Mode 沙箱、工具分层遮蔽与 Agent Loop 设计，并与 Codex 做了工程决策对比。",
+    "category": "AI Agent",
+    "source": "外部参考",
+    "tags": [
+      "AI 智能体"
+    ],
+    "id": "note-4"
+  },
+  {
+    "title": "Harness Engineering深度实践：知识沉淀才是AI工程的技术护城河",
+    "summary": "腾讯 AI Team 实践文：Harness（驾驭 Agent 的约束层）不是终点，领域知识沉淀才是护城河。给出五层存储×五类知识×三级成熟度、Git 团队知识库、工作流 INIT/ARCHIVE 闭环、渐进式索引与衰减 Lint 等落地方法。",
+    "category": "AI Agent",
+    "source": "外部参考",
+    "tags": [
+      "AI 智能体",
+      "产品设计"
+    ],
+    "id": "note-5"
+  },
+  {
+    "title": "Agent记忆设计哲学：模型越聪明，记忆越要“笨”",
+    "summary": "基于唐杰团队《Memory for Large Language Models》综述的二次解读：记忆正从算力副产品变成架构维度，KV Cache 偏短期、压缩状态偏长期，最优多为混合架构——Agent 层应做「写入要笨」的保管，把数据主权还给用户。",
+    "category": "AI Agent",
+    "source": "微信公众号",
+    "tags": [
+      "AI 智能体"
+    ],
+    "id": "note-6"
+  },
+  {
+    "title": "AI Agent 自进化系统实战：让 SKILL.md 沿着评测结果自动迭代",
+    "summary": "手改 SKILL.md 像打地鼠，修好一个 case 又搞坏另一个。这套方案让 SKILL.md 沿着评测结果自动迭代：同一 agent、同一 63 个 case 数据集，进化后通过率全面提升。",
+    "category": "AI Agent",
+    "source": "外部参考",
+    "tags": [
+      "AI 智能体"
+    ],
+    "id": "note-7"
+  },
+  {
+    "title": "技能工程化思考：个体/工程/产品的分层边界与技能-智能体依赖栈",
+    "summary": "梳理技能开发中「个体问题/工程问题/产品问题」的分层边界，以及技能稳定性对底层智能体的分层依赖（模型/Runtime/工具连接/技能设计层）——先分层诊断再决定修哪一层，而不是简单二分归类。",
+    "category": "AI Agent",
+    "source": "原创",
+    "tags": [
+      "AI 智能体"
+    ],
+    "id": "note-8"
+  },
+  {
+    "title": "Andrew Ng《AI 工程技能地图》：四大核心能力 + 第五项隐藏技能",
+    "summary": "吴恩达基于 1 万+ 招聘 JD 与专家访谈提炼 AI 工程能力地图：2022 年会写代码即可，2026 年最值钱的是决定造什么、并管好 AI 帮你造。四大核心技能之外，还有第五项隐藏技能——engineering the system that engineers。",
+    "category": "工程实践",
+    "source": "外部参考",
+    "tags": [
+      "AI 智能体",
+      "职业规划"
+    ],
+    "id": "note-9"
+  },
+  {
+    "title": "大模型推理 Batch Invariance 深度解析：从浮点原理到 vLLM 工程实现",
+    "summary": "同样提示词在并发下输出不一致，主因往往不是采样随机，而是动态组批改变了浮点累加顺序。笔记从浮点非结合律讲到 GEMM Split-K、RMSNorm 与 NCCL，对应 vLLM 通过锁死规约参数换取确定性的工程做法。",
+    "category": "工程实践",
+    "source": "原创",
+    "tags": [
+      "大模型 Eval"
+    ],
+    "id": "note-10"
+  },
+  {
+    "title": "我的多模型工作流：ChatGPT + Claude + Gemini + DeepSeek",
+    "summary": "经过大半年实际使用，我对主流模型形成了稳定的分工习惯：不同模型各有所长，按任务类型路由比单押一家效率更高。这篇记录我的多模型协作工作流与各自适用的场景。",
+    "category": "工程实践",
+    "source": "原创",
+    "id": "note-11"
+  },
+  {
+    "title": "非科班背景进入 AI 行业：我的路径和思考",
+    "summary": "我不是计算机科班出身。从化学工程转到数据分析，再到现在做 AI 应用探索，每一步都是在「够用」和「深入」之间找平衡。这篇记录我的转型路径与学习方法论。",
+    "category": "工程实践",
+    "source": "原创",
+    "id": "note-12"
+  },
+  {
+    "title": "多头会如何看待 Anthropic？——从 Claude Code 到万亿美元估值",
+    "summary": "站在多头视角，分析 Anthropic 从 Claude、Claude Code 到 Enterprise AI Infrastructure 的商业化路径，以及接近万亿美元估值背后的核心假设：AI Agent 成为数字劳动力、智能成本持续下降、企业 AI 渗透率提升。",
+    "category": "行业研究",
+    "source": "原创",
+    "tags": [
+      "AI 智能体"
+    ],
+    "id": "note-13"
+  },
+  {
+    "title": "空头会如何看待 Anthropic？——Token、价格战与 AI 模型公司的经济学困境",
+    "summary": "站在空头视角拆解 Anthropic：卖 Token 的高边际成本、与 Google Search 的规模经济差异、Claude Code 先发优势的脆弱性、价格竞争与模型层商品化风险——利润池可能向 Agent 和应用层迁移。",
+    "category": "行业研究",
+    "source": "原创",
+    "tags": [
+      "AI 智能体"
+    ],
+    "id": "note-14"
+  },
+  {
+    "title": "行业观察：AI 办公智能体（Workspace Agent）的破局与三巨头心智暗战",
+    "summary": "2026 年大模型下半场竞争转向用户心智、产品生态与工作流卡位。拆解腾讯 WorkBuddy 以免费算力换训练数据、拟人化专家团与开放路由策略实现逆袭的路径，并对比字节（豆包/飞书）与阿里（千问/钉钉）的终局走向。",
+    "category": "行业研究",
+    "source": "原创",
+    "tags": [
+      "AI 智能体"
+    ],
+    "id": "note-15"
+  }
+]
