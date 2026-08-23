@@ -176,6 +176,7 @@ ps5-homepage/
 | 2026-08-22 | v6.4 | 背景风格系统：设置齿轮接入快捷面板，5 种背景风格（深空星域/极光流域/赛博网格/静谧星云/极简暗夜），localStorage 持久化即时切换；排版优化：笔记双栏+分类筛选、About 两栏 CV 时间线、Footer 技术栈去重、详情字号微调、通知铃铛如实呈现 |
 | 2026-08-22 | v6.4.1 | Git 初始化 + GitHub 同步（long1973m/personal-site）；Push Protection 拦截旧文档中的 Notion Token 并已抹除 |
 | 2026-08-22 | v6.5 | 背景差异化：新增 4 个独立基调风格（霓虹日落/数字雨/极夜飘雪/绯樱之夜），注册表升级 base 底色+glow 光晕字段，页面基调随风格整体切换；极光四套调色板（cool/warm/ice/rose）；粒子新色相 warm/rose |
+| 2026-08-22 | v6.6 | About 叙事化重构（去简历化）+ 详情弹窗滚动修复：面板 flex 纵向布局、封面固定、内容区独立滚动、背景页滚动锁；profile.json 清洗坏代理字符/双空格/emoji 前缀，cvSections 替换为 journey stepper + beliefs 信条卡片 |
 
 ---
 
