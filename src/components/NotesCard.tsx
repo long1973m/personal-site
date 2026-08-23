@@ -16,10 +16,10 @@ interface NotesCardProps {
 }
 
 const categoryColors: Record<string, string> = {
-  'AI Agent': 'border-l-ps5-cyan',
-  '数据分析': 'border-l-ps5-purple',
-  '工程实践': 'border-l-emerald-400',
-  '行业研究': 'border-l-amber-400',
+  '数据智能': 'border-l-ps5-cyan',
+  'AI 工程': 'border-l-ps5-purple',
+  '商业观察': 'border-l-amber-400',
+  '成长与方法': 'border-l-emerald-400',
 }
 
 export default function NotesCard({ note, index, onClick }: NotesCardProps) {
