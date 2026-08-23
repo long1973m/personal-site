@@ -178,6 +178,7 @@ ps5-homepage/
 | 2026-08-22 | v6.5 | 背景差异化：新增 4 个独立基调风格（霓虹日落/数字雨/极夜飘雪/绯樱之夜），注册表升级 base 底色+glow 光晕字段，页面基调随风格整体切换；极光四套调色板（cool/warm/ice/rose）；粒子新色相 warm/rose |
 | 2026-08-22 | v6.6 | About 叙事化重构（去简历化）+ 详情弹窗滚动修复：面板 flex 纵向布局、封面固定、内容区独立滚动、背景页滚动锁；profile.json 清洗坏代理字符/双空格/emoji 前缀，cvSections 替换为 journey stepper + beliefs 信条卡片 |
 | 2026-08-23 | v6.7 | 🚀 正式上线：**https://personal-site-mu-three.vercel.app**；PS5 风格 OG 分享卡 + favicon（generate-og-image.py 可复用生成器）；canonical/og:url/og:image 绑定生产域名，TODO 清零；Vercel Git 集成打通，push 即自动部署 |
+| 2026-08-23 | v6.8 | 第二档四件套：🎮 Gamepad 手柄导航（十字键/摇杆选卡、A 确认、B 返回、Y 换背景+连接 toast）；📝 笔记详情弹窗（notes.json 补全 10 篇完整摘要）；🔍 ⌘K 全站搜索（项目+笔记、键盘导航、ControlBar 入口）；⚡ 五组件懒加载分包 + 三 canvas 页面隐藏暂停 |
 
 ---
 
