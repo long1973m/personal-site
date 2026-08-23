@@ -26,6 +26,7 @@ export default function MatrixRain() {
     const fontSize = mobile ? 16 : 15
 
     let raf = 0
+    let timer = 0
     let drops: Drop[] = []
 
     const resize = () => {
@@ -64,22 +65,37 @@ export default function MatrixRain() {
 
     const loop = () => {
       draw()
-      raf = window.setTimeout(() => { raf = requestAnimationFrame(loop) }, 33)
+      timer = window.setTimeout(() => { raf = requestAnimationFrame(loop) }, 33)
     }
+
+    // 标签页隐藏时暂停循环，可见时恢复（省电）
+    let running = false
+    const startLoop = () => {
+      if (running || reduced) return
+      running = true
+      raf = requestAnimationFrame(loop)
+    }
+    const stopLoop = () => {
+      running = false
+      cancelAnimationFrame(raf)
+      clearTimeout(timer)
+    }
+    const onVis = () => { document.hidden ? stopLoop() : startLoop() }
 
     resize()
     if (reduced) {
       // 减动效：只静帧渲染一层雨幕
       for (let i = 0; i < 24; i++) draw()
     } else {
-      raf = requestAnimationFrame(loop)
+      startLoop()
     }
 
     window.addEventListener('resize', resize)
+    document.addEventListener('visibilitychange', onVis)
     return () => {
-      cancelAnimationFrame(raf)
-      clearTimeout(raf as unknown as number)
+      stopLoop()
       window.removeEventListener('resize', resize)
+      document.removeEventListener('visibilitychange', onVis)
     }
   }, [])
 

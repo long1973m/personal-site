@@ -12,6 +12,7 @@ interface Note {
 interface NotesCardProps {
   note: Note
   index: number
+  onClick?: () => void
 }
 
 const categoryColors: Record<string, string> = {
@@ -21,7 +22,7 @@ const categoryColors: Record<string, string> = {
   '行业研究': 'border-l-amber-400',
 }
 
-export default function NotesCard({ note, index }: NotesCardProps) {
+export default function NotesCard({ note, index, onClick }: NotesCardProps) {
   const borderColor = categoryColors[note.category] || 'border-l-gray-400'
 
   return (
@@ -29,7 +30,8 @@ export default function NotesCard({ note, index }: NotesCardProps) {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.08 }}
-      className={`glass rounded-2xl p-5 border-l-4 ${borderColor} hover:bg-white/10 transition-all duration-300 group`}
+      onClick={onClick}
+      className={`glass rounded-2xl p-5 border-l-4 ${borderColor} hover:bg-white/10 transition-all duration-300 group ${onClick ? 'cursor-pointer' : ''}`}
     >
       <div className="flex items-start gap-3">
         <div className="flex-1 min-w-0">

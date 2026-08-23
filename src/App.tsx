@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ParticleBackground from './components/ParticleBackground'
 import AuroraBackground from './components/AuroraBackground'
@@ -13,17 +13,33 @@ import BootScreen from './components/BootScreen'
 import CardGrid from './components/CardGrid'
 import BackgroundBlur from './components/BackgroundBlur'
 import ControlBar from './components/ControlBar'
-import ProjectDetail from './components/ProjectDetail'
 import Hero from './components/Hero'
 import SidebarNav, { TabType } from './components/SidebarNav'
 import MobileTabBar from './components/MobileTabBar'
-import About from './components/About'
-import Notes from './components/Notes'
 import Footer from './components/Footer'
+import { useGamepadNav } from './hooks/useGamepadNav'
 import { BACKGROUND_STYLES, getStoredBackgroundId, storeBackgroundId } from './theme/backgrounds'
 import projects from './data/projects.json'
 import notes from './data/notes.json'
 import profile from './data/profile.json'
+
+interface NoteItem {
+  id: string
+  title: string
+  summary: string
+  category: string
+  detail?: string
+  tags?: string[]
+  source?: string
+}
+const typedNotes = notes as NoteItem[]
+
+// 懒加载分包：Notes / About / 两个详情弹窗 / 搜索面板按需加载，首屏只带主视图
+const About = lazy(() => import('./components/About'))
+const Notes = lazy(() => import('./components/Notes'))
+const ProjectDetail = lazy(() => import('./components/ProjectDetail'))
+const NoteDetail = lazy(() => import('./components/NoteDetail'))
+const CommandPalette = lazy(() => import('./components/CommandPalette'))
 
 function App() {
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -39,6 +55,11 @@ function App() {
       return false
     }
   })
+  // 笔记详情 / 全站搜索 / 手柄连接状态
+  const [activeNote, setActiveNote] = useState<NoteItem | null>(null)
+  const [paletteOpen, setPaletteOpen] = useState(false)
+  const [gamepadOn, setGamepadOn] = useState(false)
+  const [padToast, setPadToast] = useState(false)
 
   const handleSelect = useCallback((index: number) => {
     setSelectedIndex(index)
@@ -51,6 +72,72 @@ function App() {
   const handleCloseDetail = useCallback(() => {
     setShowDetail(false)
   }, [])
+
+  const handleOpenNote = useCallback((note: NoteItem) => {
+    setActiveNote(note)
+  }, [])
+
+  const handleCloseNote = useCallback(() => {
+    setActiveNote(null)
+  }, [])
+
+  const handleCycleBackground = useCallback(() => {
+    setBackgroundId(prev => {
+      const idx = BACKGROUND_STYLES.findIndex(b => b.id === prev)
+      const next = BACKGROUND_STYLES[(idx + 1) % BACKGROUND_STYLES.length]
+      storeBackgroundId(next.id)
+      return next.id
+    })
+  }, [])
+
+  // ⌘K / Ctrl+K 唤起全站搜索
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setPaletteOpen(v => !v)
+      }
+    }
+    window.addEventListener('keydown', h)
+    return () => window.removeEventListener('keydown', h)
+  }, [])
+
+  // 手柄热插拔监听 + 连接提示
+  useEffect(() => {
+    let toastTimer = 0
+    const onConnect = () => {
+      setGamepadOn(true)
+      setPadToast(true)
+      window.clearTimeout(toastTimer)
+      toastTimer = window.setTimeout(() => setPadToast(false), 2800)
+    }
+    const onDisconnect = () => setGamepadOn(false)
+    window.addEventListener('gamepadconnected', onConnect)
+    window.addEventListener('gamepaddisconnected', onDisconnect)
+    return () => {
+      window.clearTimeout(toastTimer)
+      window.removeEventListener('gamepadconnected', onConnect)
+      window.removeEventListener('gamepaddisconnected', onDisconnect)
+    }
+  }, [])
+
+  // 手柄导航：十字键/左摇杆选卡片，A 进详情，B 退出，Y 切换背景风格
+  useGamepadNav({
+    enabled: booted && gamepadOn && !paletteOpen,
+    onLeft: () => {
+      if (activeTab === 'projects' && !showDetail) setSelectedIndex(i => Math.max(0, i - 1))
+    },
+    onRight: () => {
+      if (activeTab === 'projects' && !showDetail) setSelectedIndex(i => Math.min(projects.length - 1, i + 1))
+    },
+    onConfirm: () => {
+      if (activeTab === 'projects' && !showDetail) setShowDetail(true)
+    },
+    onBack: () => {
+      if (showDetail) setShowDetail(false)
+    },
+    onExtra: handleCycleBackground,
+  })
 
   const handleTabChange = useCallback((tab: TabType) => {
     setActiveTab(tab)
@@ -135,6 +222,7 @@ function App() {
             backgroundId={bgStyle.id}
             onSelectBackground={handleSelectBackground}
             onReplayBoot={handleReplayBoot}
+            onOpenSearch={() => setPaletteOpen(true)}
           />
 
           <SidebarNav
@@ -157,14 +245,16 @@ function App() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                   >
-                    <About
-                      paragraphs={profile.about.paragraphs}
-                      focusTopics={profile.about.focusTopics}
-                      interests={profile.about.interests}
-                      journey={profile.about.journey}
-                      beliefs={profile.about.beliefs}
-                      contact={profile.about.contact}
-                    />
+                    <Suspense fallback={null}>
+                      <About
+                        paragraphs={profile.about.paragraphs}
+                        focusTopics={profile.about.focusTopics}
+                        interests={profile.about.interests}
+                        journey={profile.about.journey}
+                        beliefs={profile.about.beliefs}
+                        contact={profile.about.contact}
+                      />
+                    </Suspense>
                   </motion.div>
                 )}
 
@@ -219,7 +309,9 @@ function App() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                   >
-                    <Notes notes={notes} />
+                    <Suspense fallback={null}>
+                      <Notes notes={typedNotes} onOpenNote={handleOpenNote} />
+                    </Suspense>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -234,10 +326,59 @@ function App() {
 
           <AnimatePresence>
             {showDetail && currentProject && (
-              <ProjectDetail
-                project={currentProject}
-                onClose={handleCloseDetail}
-              />
+              <Suspense fallback={null}>
+                <ProjectDetail
+                  project={currentProject}
+                  onClose={handleCloseDetail}
+                />
+              </Suspense>
+            )}
+          </AnimatePresence>
+
+          {/* 笔记详情弹窗 */}
+          <AnimatePresence>
+            {activeNote && (
+              <Suspense fallback={null}>
+                <NoteDetail note={activeNote} onClose={handleCloseNote} />
+              </Suspense>
+            )}
+          </AnimatePresence>
+
+          {/* ⌘K 全站搜索 */}
+          <AnimatePresence>
+            {paletteOpen && (
+              <Suspense fallback={null}>
+                <CommandPalette
+                  open
+                  projects={projects}
+                  notes={typedNotes}
+                  onClose={() => setPaletteOpen(false)}
+                  onPickProject={(index) => {
+                    setActiveTab('projects')
+                    setSelectedIndex(index)
+                    setShowDetail(true)
+                  }}
+                  onPickNote={(note) => {
+                    setActiveTab('notes')
+                    setActiveNote(note)
+                  }}
+                />
+              </Suspense>
+            )}
+          </AnimatePresence>
+
+          {/* 手柄连接提示 */}
+          <AnimatePresence>
+            {padToast && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="fixed bottom-24 md:bottom-8 right-4 md:right-8 z-[60] glass-strong rounded-full px-5 py-3 flex items-center gap-2.5 shadow-xl shadow-black/40"
+              >
+                <span className="text-lg">🎮</span>
+                <span className="text-xs sm:text-sm text-gray-200">手柄已连接 · 十字键选择 / A 确认 / B 返回 / Y 换背景</span>
+              </motion.div>
             )}
           </AnimatePresence>
         </>

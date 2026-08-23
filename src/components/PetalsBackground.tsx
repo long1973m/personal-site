@@ -92,18 +92,34 @@ export default function PetalsBackground() {
       raf = requestAnimationFrame(frame)
     }
 
+    // 标签页隐藏时暂停循环，可见时恢复（省电）
+    let running = false
+    const startLoop = () => {
+      if (running || reduced) return
+      running = true
+      last = 0
+      raf = requestAnimationFrame(frame)
+    }
+    const stopLoop = () => {
+      running = false
+      cancelAnimationFrame(raf)
+    }
+    const onVis = () => { document.hidden ? stopLoop() : startLoop() }
+
     resize()
     if (reduced) {
       frame(0)
       cancelAnimationFrame(raf)
     } else {
-      raf = requestAnimationFrame(frame)
+      startLoop()
     }
 
     window.addEventListener('resize', resize)
+    document.addEventListener('visibilitychange', onVis)
     return () => {
-      cancelAnimationFrame(raf)
+      stopLoop()
       window.removeEventListener('resize', resize)
+      document.removeEventListener('visibilitychange', onVis)
     }
   }, [])
 

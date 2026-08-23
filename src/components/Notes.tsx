@@ -13,6 +13,7 @@ interface Note {
 
 interface NotesProps {
   notes: Note[]
+  onOpenNote?: (note: Note) => void
 }
 
 const container = {
@@ -25,7 +26,7 @@ const container = {
   },
 }
 
-export default function Notes({ notes }: NotesProps) {
+export default function Notes({ notes, onOpenNote }: NotesProps) {
   // 分类统计（保持首次出现顺序）
   const categories = useMemo(() => {
     const counts: { name: string; count: number }[] = [{ name: '全部', count: notes.length }]
@@ -85,7 +86,7 @@ export default function Notes({ notes }: NotesProps) {
           className="grid md:grid-cols-2 gap-3"
         >
           {filtered.map((note, index) => (
-            <NotesCard key={note.id} note={note} index={index} />
+            <NotesCard key={note.id} note={note} index={index} onClick={() => onOpenNote?.(note)} />
           ))}
         </motion.div>
 
