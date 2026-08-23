@@ -6,6 +6,11 @@ interface Project {
   id: string
   title: string
   description: string
+  detail?: {
+    did: string
+    approach: string
+    takeaway: string
+  }
   detailDescription?: string
   coverImage: string
   coverComponent?: string
@@ -107,9 +112,36 @@ export default function ProjectDetail({ project, onClose }: ProjectDetailProps) 
             {project.title}
           </h2>
 
-          <p className="text-gray-300 text-base leading-7 mb-6 whitespace-pre-line">
-            {project.detailDescription || project.description}
-          </p>
+          {/* 三段式叙述：做了什么 / 怎么想的 / 沉淀了什么 */}
+          {project.detail ? (
+            <div className="space-y-6 mb-6">
+              {([
+                ['做了什么', project.detail.did, false],
+                ['怎么想的', project.detail.approach, false],
+                ['沉淀了什么', project.detail.takeaway, true],
+              ] as const).map(([label, text, highlight]) => (
+                <div key={label}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className={`w-1 h-3.5 rounded-full ${highlight ? 'bg-ps5-cyan shadow-[0_0_8px_rgba(6,182,212,0.9)]' : 'bg-ps5-purple'}`} />
+                    <span className={`text-xs font-semibold tracking-widest ${highlight ? 'text-ps5-cyan' : 'text-gray-400'}`}>
+                      {label}
+                    </span>
+                  </div>
+                  <p className={`text-base leading-7 whitespace-pre-line ${
+                    highlight
+                      ? 'text-gray-200 border-l-2 border-ps5-cyan/40 pl-4 py-1 bg-white/[0.04] rounded-r-xl'
+                      : 'text-gray-300'
+                  }`}>
+                    {text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-300 text-base leading-7 mb-6 whitespace-pre-line">
+              {project.detailDescription || project.description}
+            </p>
+          )}
 
           {/* Tags */}
           {project.tags && project.tags.length > 0 && (

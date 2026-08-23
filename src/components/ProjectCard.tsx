@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSound } from '../hooks/useSound'
-import { coverComponents } from './covers/CoverMap'
 
 interface Project {
   id: string
@@ -14,21 +13,32 @@ interface Project {
   tags?: string[]
 }
 
+// 卡片封面主题：每个项目一个深色渐变基调（流程图只放在详情弹窗，卡片走轻量视觉）
+const CARD_THEMES = [
+  { base: '#150d2e', accent: '#6b46c1', glow: 'rgba(107,70,193,0.45)' },
+  { base: '#07242c', accent: '#06b6d4', glow: 'rgba(6,182,212,0.4)' },
+  { base: '#0b2a22', accent: '#10b981', glow: 'rgba(16,185,129,0.38)' },
+  { base: '#2a1030', accent: '#ec4899', glow: 'rgba(236,72,153,0.36)' },
+  { base: '#2b1d0a', accent: '#f59e0b', glow: 'rgba(245,158,11,0.34)' },
+]
+
 interface ProjectCardProps {
   project: Project
+  index: number
   isSelected: boolean
   isAnySelected: boolean
   onClick: () => void
   onOpenDetail: () => void
-  showDetail: boolean
 }
 
-export default function ProjectCard({ project, isSelected, isAnySelected, onClick, onOpenDetail, showDetail }: ProjectCardProps) {
+export default function ProjectCard({ project, index, isSelected, isAnySelected, onClick, onOpenDetail }: ProjectCardProps) {
   const isUnselected = isAnySelected && !isSelected
   const { playHover } = useSound({ volume: 0.15 })
-  const [imgError, setImgError] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+
+  const theme = CARD_THEMES[index % CARD_THEMES.length]
+  const num = String(index + 1).padStart(2, '0')
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current || !isSelected) return
@@ -53,9 +63,6 @@ export default function ProjectCard({ project, isSelected, isAnySelected, onClic
       onOpenDetail()
     }
   }
-
-  const firstLetter = project.title.charAt(0).toUpperCase()
-  const CoverSvg = project.coverComponent ? coverComponents[project.coverComponent] : null
 
   return (
     <div
@@ -119,25 +126,35 @@ export default function ProjectCard({ project, isSelected, isAnySelected, onClic
           </>
         )}
 
+        {/* 封面区：项目专属渐变 + 巨型序号 + 光斑（轻量视觉，流程图留给详情） */}
         <div className="relative h-[60%] overflow-hidden">
-          {imgError ? (
-            <div className="w-full h-full bg-gradient-to-br from-ps5-purple to-ps5-cyan flex items-center justify-center">
-              <span className="text-5xl font-bold text-white/80">{firstLetter}</span>
-            </div>
-          ) : CoverSvg ? (
-            <CoverSvg className="w-full h-full" />
-          ) : showDetail && isSelected ? (
-            <div className="w-full h-full bg-gradient-to-br from-ps5-purple/50 to-ps5-cyan/50" />
-          ) : (
-            <motion.img
-              layoutId={`project-cover-${project.id}`}
-              src={project.coverImage}
-              alt={project.title}
-              className="w-full h-full object-cover"
-              loading="lazy"
-              onError={() => setImgError(true)}
-            />
-          )}
+          <div
+            className="absolute inset-0"
+            style={{ background: `linear-gradient(155deg, ${theme.base} 0%, ${theme.base} 45%, ${theme.accent}55 130%)` }}
+          />
+          {/* 右上光斑 */}
+          <div
+            className="absolute -top-10 -right-10 w-44 h-44 rounded-full blur-3xl"
+            style={{ background: theme.glow }}
+          />
+          {/* 对角细线 */}
+          <div
+            className="absolute inset-0 opacity-25"
+            style={{ background: `linear-gradient(115deg, transparent 42%, ${theme.accent}88 50%, transparent 58%)` }}
+          />
+          {/* 巨型序号 */}
+          <span
+            className="absolute bottom-1 right-4 text-[7rem] leading-none font-bold font-mono select-none"
+            style={{ color: 'rgba(255,255,255,0.13)', textShadow: `0 0 40px ${theme.glow}` }}
+            aria-hidden="true"
+          >
+            {num}
+          </span>
+          {/* 顶部小标签条 */}
+          <div className="absolute top-4 left-4 flex items-center gap-2">
+            <span className="w-6 h-0.5 rounded-full" style={{ background: theme.accent }} />
+            <span className="text-[10px] tracking-[0.25em] text-white/60 font-mono">CASE</span>
+          </div>
           <div className="absolute inset-0 bg-gradient-to-t from-ps5-dark/80 via-transparent to-transparent" />
         </div>
 

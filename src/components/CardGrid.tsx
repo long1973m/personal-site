@@ -22,7 +22,7 @@ interface CardGridProps {
   showDetail?: boolean
 }
 
-export default function CardGrid({ projects, selectedIndex, onSelect, onOpenDetail, disabled = false, showDetail = false }: CardGridProps) {
+export default function CardGrid({ projects, selectedIndex, onSelect, onOpenDetail, disabled = false }: CardGridProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isMobile, setIsMobile] = useState(false)
   const [isScrollLocked, setIsScrollLocked] = useState(false)
@@ -175,11 +175,11 @@ export default function CardGrid({ projects, selectedIndex, onSelect, onOpenDeta
             >
               <ProjectCard
                 project={project}
+                index={index}
                 isSelected={index === selectedIndex}
                 isAnySelected={selectedIndex !== -1}
                 onClick={() => onSelect(index)}
                 onOpenDetail={onOpenDetail}
-                showDetail={showDetail && index === selectedIndex}
               />
             </motion.div>
           ))}
