@@ -180,6 +180,7 @@ ps5-homepage/
 | 2026-08-23 | v6.7 | 🚀 正式上线：**https://personal-site-mu-three.vercel.app**；PS5 风格 OG 分享卡 + favicon（generate-og-image.py 可复用生成器）；canonical/og:url/og:image 绑定生产域名，TODO 清零；Vercel Git 集成打通，push 即自动部署 |
 | 2026-08-23 | v6.8 | 第二档四件套：🎮 Gamepad 手柄导航（十字键/摇杆选卡、A 确认、B 返回、Y 换背景+连接 toast）；📝 笔记详情弹窗（notes.json 补全 10 篇完整摘要）；🔍 ⌘K 全站搜索（项目+笔记、键盘导航、ControlBar 入口）；⚡ 五组件懒加载分包 + 三 canvas 页面隐藏暂停 |
 | 2026-08-23 | v6.9 | 项目卡片视觉重做：封面弃用流程图 SVG 改为五色渐变+巨型序号轻量视觉；标题去「Case Study N：」前缀并修复 CS1-3 坏副标题；详情改三段式 detail{did,approach,takeaway}（做了什么/怎么想的/沉淀了什么），长文压缩至 250 字；主包 366KB→319KB |
+| 2026-08-23 | v6.10 | 笔记信息增量升级：notes.json 15/15 篇新增 point（核心增量）+value（怎么用）双字段；NoteDetail 改三层递进（说了什么→核心增量高亮→怎么用）；⌘K 搜索语料覆盖新字段 |
 
 ---
 
