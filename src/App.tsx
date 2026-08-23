@@ -29,6 +29,8 @@ interface NoteItem {
   summary: string
   category: string
   detail?: string
+  point?: string
+  value?: string
   tags?: string[]
   source?: string
 }

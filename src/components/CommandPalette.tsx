@@ -13,6 +13,8 @@ interface NoteItem {
   title: string
   summary: string
   category: string
+  point?: string
+  value?: string
   tags?: string[]
 }
 
@@ -54,7 +56,7 @@ export default function CommandPalette({ open, projects, notes, onClose, onPickP
       .map(({ p, index }) => ({ kind: '项目' as const, title: p.title, sub: p.description, projectIndex: index }))
 
     const n = notes
-      .filter((n) => match(n.title, n.summary, n.category, ...(n.tags ?? [])))
+      .filter((n) => match(n.title, n.summary, n.category, n.point, n.value, ...(n.tags ?? [])))
       .map((n) => ({ kind: '笔记' as const, title: n.title, sub: n.summary, note: n }))
 
     return [...p, ...n].slice(0, 10)

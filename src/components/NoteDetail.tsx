@@ -7,6 +7,8 @@ interface Note {
   summary: string
   category: string
   detail?: string
+  point?: string
+  value?: string
   tags?: string[]
   source?: string
 }
@@ -17,7 +19,7 @@ interface NoteDetailProps {
 }
 
 /**
- * 笔记详情弹窗：封面区换成分类信息头，正文展示完整摘要（detail 优先）
+ * 笔记详情弹窗：三层递进 —— 说了什么（摘要）→ 核心增量（最值钱的判断，高亮）→ 怎么用（可操作收获）
  * 与 ProjectDetail 同款交互四件套：Escape 关闭 / 背景滚动锁 / 内部滚动 / 点击遮罩关闭
  */
 export default function NoteDetail({ note, onClose }: NoteDetailProps) {
@@ -33,8 +35,6 @@ export default function NoteDetail({ note, onClose }: NoteDetailProps) {
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [onClose])
-
-  const body = note.detail || note.summary
 
   return (
     <motion.div
@@ -82,9 +82,47 @@ export default function NoteDetail({ note, onClose }: NoteDetailProps) {
 
         {/* 正文滚动区 */}
         <div className="overflow-y-auto px-7 py-6">
-          <p className="text-gray-300 text-base leading-8 whitespace-pre-line">
-            {body}
-          </p>
+          {note.point || note.value ? (
+            <div className="space-y-6">
+              {/* 摘要：说了什么 */}
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-1 h-3.5 rounded-full bg-ps5-purple" />
+                  <span className="text-xs font-semibold tracking-widest text-gray-400">说了什么</span>
+                </div>
+                <p className="text-sm text-gray-400 leading-7">{note.summary}</p>
+              </div>
+
+              {/* 核心增量：最值钱的一个判断（高亮收尾块） */}
+              {note.point && (
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-1 h-3.5 rounded-full bg-ps5-cyan shadow-[0_0_8px_rgba(6,182,212,0.9)]" />
+                    <span className="text-xs font-semibold tracking-widest text-ps5-cyan">核心增量</span>
+                  </div>
+                  <p className="text-base text-gray-200 leading-7 border-l-2 border-ps5-cyan/40 pl-4 py-1 bg-white/[0.04] rounded-r-xl">
+                    {note.point}
+                  </p>
+                </div>
+              )}
+
+              {/* 怎么用：可操作的收获 */}
+              {note.value && (
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-1 h-3.5 rounded-full bg-ps5-purple" />
+                    <span className="text-xs font-semibold tracking-widest text-gray-400">怎么用</span>
+                  </div>
+                  <p className="text-sm text-gray-300 leading-7">{note.value}</p>
+                </div>
+              )}
+            </div>
+          ) : (
+            /* 回退：无结构化字段时展示完整摘要 */
+            <p className="text-gray-300 text-base leading-8 whitespace-pre-line">
+              {note.detail || note.summary}
+            </p>
+          )}
 
           {note.tags && note.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-6 pt-5 border-t border-white/10">
