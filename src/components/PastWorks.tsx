@@ -40,7 +40,7 @@ export default function PastWorks({ works, onOpen }: PastWorksProps) {
           <h2 className="text-3xl font-bold text-white gradient-text-animated">旧作</h2>
           <span className="text-xs text-gray-500 pb-1">Past Works</span>
         </div>
-        <p className="text-gray-400 text-sm mb-8">以前做过的东西 —— 不成体系，但都是真的动手做过的</p>
+        <p className="text-gray-400 text-sm mb-8">个人开源项目 —— 源码公开，可以直接看实现</p>
 
         <div className="grid md:grid-cols-2 gap-4">
           {works.map((work, index) => {

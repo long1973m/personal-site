@@ -36,10 +36,10 @@ const tabs: { id: TabType; label: string; icon: JSX.Element }[] = [
   },
   {
     id: 'past',
-    label: '旧作',
+    label: '个人项目',
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.5 3.5L18 6m-3.5 3.5L14 11l-4 4m0 0l-4 4 4 4 4-4-4-4zm7-7l-3.5 3.5M14 14l-3.5-3.5" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m8-6l-3 3 3 3" />
       </svg>
     ),
   },
