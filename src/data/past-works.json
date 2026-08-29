@@ -1,5 +1,14 @@
 [
   {
+    "id": "personal-site",
+    "title": "个人主页",
+    "year": "2026",
+    "what": "PS5 风格个人主页：React + TypeScript + Tailwind + Framer Motion。含 Case Study 展示、知识笔记、9 种可切换背景风格、手柄导航与 ⌘K 搜索，已部署在 Vercel。",
+    "why": "想有一个真正属于自己的、能持续演进的数字门面 —— 不是一份静态简历，而是一个会跟着自己成长的系统。",
+    "tech": ["React", "TypeScript", "Tailwind", "Framer Motion", "Vite", "Vercel"],
+    "link": "https://github.com/long1973m/personal-site"
+  },
+  {
     "id": "pi-data-agent",
     "title": "Pi Data Agent",
     "year": "2025",
