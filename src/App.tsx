@@ -21,6 +21,7 @@ import { useGamepadNav } from './hooks/useGamepadNav'
 import { BACKGROUND_STYLES, getStoredBackgroundId, storeBackgroundId } from './theme/backgrounds'
 import projects from './data/projects.json'
 import notes from './data/notes.json'
+import pastWorks from './data/past-works.json'
 import profile from './data/profile.json'
 
 interface NoteItem {
@@ -36,11 +37,23 @@ interface NoteItem {
 }
 const typedNotes = notes as NoteItem[]
 
-// 懒加载分包：Notes / About / 两个详情弹窗 / 搜索面板按需加载，首屏只带主视图
+interface PastWorkItem {
+  id: string
+  title: string
+  year: string
+  what: string
+  why: string
+  tech: string[]
+  link?: string
+}
+
+// 懒加载分包：Notes / About / 旧作 / 两个详情弹窗 / 搜索面板按需加载，首屏只带主视图
 const About = lazy(() => import('./components/About'))
 const Notes = lazy(() => import('./components/Notes'))
+const PastWorks = lazy(() => import('./components/PastWorks'))
 const ProjectDetail = lazy(() => import('./components/ProjectDetail'))
 const NoteDetail = lazy(() => import('./components/NoteDetail'))
+const PastWorkDetail = lazy(() => import('./components/PastWorkDetail'))
 const CommandPalette = lazy(() => import('./components/CommandPalette'))
 
 function App() {
@@ -57,8 +70,9 @@ function App() {
       return false
     }
   })
-  // 笔记详情 / 全站搜索 / 手柄连接状态
+  // 笔记详情 / 旧作详情 / 全站搜索 / 手柄连接状态
   const [activeNote, setActiveNote] = useState<NoteItem | null>(null)
+  const [selectedPastWork, setSelectedPastWork] = useState<PastWorkItem | null>(null)
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [gamepadOn, setGamepadOn] = useState(false)
   const [padToast, setPadToast] = useState(false)
@@ -81,6 +95,14 @@ function App() {
 
   const handleCloseNote = useCallback(() => {
     setActiveNote(null)
+  }, [])
+
+  const handleOpenPast = useCallback((work: PastWorkItem) => {
+    setSelectedPastWork(work)
+  }, [])
+
+  const handleClosePast = useCallback(() => {
+    setSelectedPastWork(null)
   }, [])
 
   const handleCycleBackground = useCallback(() => {
@@ -316,6 +338,19 @@ function App() {
                     </Suspense>
                   </motion.div>
                 )}
+
+                {activeTab === 'past' && (
+                  <motion.div
+                    key="past"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <Suspense fallback={null}>
+                      <PastWorks works={pastWorks} onOpen={handleOpenPast} />
+                    </Suspense>
+                  </motion.div>
+                )}
               </AnimatePresence>
             </main>
 
@@ -342,6 +377,15 @@ function App() {
             {activeNote && (
               <Suspense fallback={null}>
                 <NoteDetail note={activeNote} onClose={handleCloseNote} />
+              </Suspense>
+            )}
+          </AnimatePresence>
+
+          {/* 旧作详情弹窗 */}
+          <AnimatePresence>
+            {selectedPastWork && (
+              <Suspense fallback={null}>
+                <PastWorkDetail work={selectedPastWork} onClose={handleClosePast} />
               </Suspense>
             )}
           </AnimatePresence>
